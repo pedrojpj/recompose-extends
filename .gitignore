@@ -1,0 +1,10 @@
+# Editors
+.idea
+.vscode
+
+# dependencies
+/coverage
+/node_modules
+/dist
+.project
+yarn-error.log
