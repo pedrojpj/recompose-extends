@@ -2,7 +2,7 @@
   "name": "recompose-extends",
   "version": "0.0.0-development",
   "description": "",
-  "main": "src/index.js",
+  "main": "dist/recompose-extends.js",
   "scripts": {
     "build": "webpack",
     "lint": "eslint ./src/**/*.js",
