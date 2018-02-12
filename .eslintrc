@@ -11,7 +11,12 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["**/*.test.js", "webpack.config.js", "webpack.dev.config.js"]
+        "devDependencies": [
+          "**/*.test.js",
+          "webpack.config.js",
+          "webpack.dev.config.js",
+          "webpack.demo.config.js"
+        ]
       }
     ],
     "prettier/prettier": [
