@@ -3,11 +3,11 @@ import { Title, Subtitle, Content, Container, Button } from './style';
 
 const ErrorComponent = ({ error, title, onToggle, show, debug }) => (
   <div>
-    <Title>¡Hubo un error!</Title>
+    <Title>There was a mistake!</Title>
     {debug ? (
       <div>
         <Subtitle>{title}</Subtitle>
-        <Button onClick={onToggle}>{show ? 'Ver menos' : 'Ver más'}</Button>
+        <Button onClick={onToggle}>{show ? 'See less' : 'See more'}</Button>
         <Container active={show}>
           <Content dangerouslySetInnerHTML={{ __html: error }} />
         </Container>

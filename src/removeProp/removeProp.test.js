@@ -17,16 +17,12 @@ describe('Remove Props', () => {
     const Component = removeProp('title')(ComponentMock);
     const wrapper = shallow(<Component title="Prueba" />).dive();
 
-    console.log(wrapper.props());
-
     expect(wrapper.props().children).toBeUndefined();
   });
 
   it('should not remove prop title of the component', () => {
     const Component = removeProp('name')(ComponentMock);
     const wrapper = shallow(<Component title="Prueba" />).dive();
-
-    console.log(wrapper.props());
 
     expect(wrapper.props().children).toBeDefined();
   });
