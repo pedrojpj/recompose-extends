@@ -16,11 +16,11 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'example/index.html')
+      template: path.resolve('example/index.html')
     })
   ],
   devServer: {
-    contentBase: path.join(__dirname, 'dist-example'),
+    contentBase: path.resolve('docs'),
     port: 8090
   }
 };
