@@ -15,7 +15,6 @@ const withModal = (input, component, extraProps) => BaseComponent => {
 
   if (!document.getElementById('modal')) {
     const modalDiv = document.createElement('div');
-
     modalDiv.setAttribute('id', 'modal');
     document.body.appendChild(modalDiv);
   }
