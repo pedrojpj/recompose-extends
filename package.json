@@ -5,6 +5,7 @@
   "main": "dist/recompose-extends.js",
   "scripts": {
     "start:example": "webpack-dev-server --config=webpack.demo.config.js",
+    "build:demo": "webpack --config=webpack.demo.config.js",
     "build": "webpack",
     "lint": "eslint ./src/**/*.js",
     "test": "jest --config=jest.config.js",
