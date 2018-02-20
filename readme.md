@@ -47,6 +47,18 @@ const enhance = compose(
 
 Wait for one or more promises before rendering the component
 
+### `withActions()`
+
+To use with the component withReducer, you can create props as curry functions that receive the dispatch and status by default. Similar to Redux's connect
+
+### `withErrors()`
+
+Adds an error handler in the component allowing you to visualize the chain of errors in debug mode or prevent the rendering of other components from failing. Similar to the componctDidCatch of React
+
+### `withModal()`
+
+High order component used to render another component in portal mode next to our base component. Useful for manners or tooltips
+
 
 
 
