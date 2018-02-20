@@ -5,5 +5,7 @@ module.exports = {
       '<rootDir>/__mocks__/fileMock.js'
   },
   testPathIgnorePatterns: ['/node_modules'],
-  setupFiles: ['raf/polyfill']
+  setupFiles: ['raf/polyfill'],
+  coverageDirectory: './coverage/',
+  collectCoverage: true
 };
