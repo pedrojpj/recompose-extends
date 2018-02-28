@@ -2,6 +2,7 @@ language:
   node_js
 install:
   - npm install -g codecov
+  - npm install -g npm-install-peers
 sudo: true
 dist: trusty
 node_js:
@@ -20,6 +21,7 @@ before_install:
 - export DISPLAY=:99.0
 - sh -e /etc/init.d/xvfb start
 before_script:
+- npm-install-peers
 - yarn
 script:
 - yarn test -- --coverage
