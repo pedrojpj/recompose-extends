@@ -59,6 +59,34 @@ Adds an error handler in the component allowing you to visualize the chain of er
 
 High order component used to render another component in portal mode next to our base component. Useful for manners or tooltips
 
+### `withForm()`
+
+```js
+
+const Form = ({ form, updateForm, submitForm }) => (
+  <form>
+    <input type="text" name="name" value={form.name} onChange={updateForm} />
+    <button type="submit" onClick={submitForm}>
+      Send
+    </button>
+  </form>
+);
+
+const enhance = compose(
+  withForm(
+    {
+      name: { value: '', required: true }
+    },
+    () => () => {
+      console.log('form submitted');
+    }
+  )
+)(Form);
+
+```
+
+High order component that allows to manage a form, includes validation of required fields
+
 
 
 
