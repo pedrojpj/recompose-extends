@@ -54,8 +54,7 @@
   "dependencies": {
     "react": "^16.1.1",
     "react-dom": "^16.2.0",
-    "recompose": "^0.26.0",
-    "styled-components": "^2.0.0"
+    "recompose": "^0.26.0"
   },
   "config": {
     "commitizen": {
