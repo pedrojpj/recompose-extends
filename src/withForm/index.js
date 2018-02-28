@@ -12,11 +12,6 @@ const withForm = (input, handlers) => BaseComponent => {
         form[key] = input[key].value;
       });
 
-      if (handlers) {
-        this.handlers =
-          typeof handlers === 'function' ? handlers(props) : handlers;
-      }
-
       this.state = {
         form,
         formError: false
@@ -64,15 +59,36 @@ const withForm = (input, handlers) => BaseComponent => {
       event.preventDefault();
     };
 
+    resetForm = () => {
+      const form = {};
+      Object.keys(input).forEach(key => {
+        form[key] = input[key].value;
+      });
+
+      this.setState(() => ({
+        form,
+        formError: false
+      }));
+    };
+
     render() {
       const { form, formError } = this.state;
-
-      return factory({
+      const props = {
         ...this.props,
         form,
         formError,
         updateForm: this.updateForm,
-        submitForm: this.submitForm
+        submitForm: this.submitForm,
+        resetForm: this.resetForm
+      };
+
+      if (handlers) {
+        this.handlers =
+          typeof handlers === 'function' ? handlers(props) : handlers;
+      }
+
+      return factory({
+        ...props
       });
     }
   }

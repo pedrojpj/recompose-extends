@@ -91,5 +91,38 @@ describe('With Errors', () => {
       .find('input')
       .simulate('change', { target: { value: 'text', name: 'name' } });
     wrapper.find('button').simulate('click');
+
+    expect(wrapper.find(Form).props().submit).toBeTruthy();
+  });
+
+  it('should reset the values of the form', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={updateForm}
+        />
+        <button onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withState('submit', 'setSubmit', false),
+      withForm({ name: { value: '' } }, ({ setSubmit, resetForm }) => () => {
+        setSubmit(true);
+        resetForm();
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+    wrapper
+      .find('input')
+      .simulate('change', { target: { value: 'text', name: 'name' } });
+
+    expect(wrapper.find(Form).props().form.name).toBe('text');
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find(Form).props().form.name).toBe('');
   });
 });
