@@ -1,16 +1,74 @@
 import React, { createFactory, Component } from 'react';
-import { Title, Subtitle, Content, Container, Button } from './style';
+
+const style = {
+  title: {
+    color: 'Crimson',
+    fontSize: '18px',
+    lineHeight: '22px',
+    textAlign: 'center',
+    margin: '0 0 5px 0',
+    padding: '0'
+  },
+  button: {
+    border: '0',
+    background: 'transparent',
+    fontWeight: 'bold',
+    color: 'Crimson',
+    textDecoration: 'underline',
+    outline: '0',
+    marginBottom: '5px'
+  },
+  subtitle: {
+    color: 'Black',
+    fontSize: '14px',
+    lineHeight: '16px',
+    textAlign: 'center',
+    margin: '0 0 10px 0',
+    padding: '0'
+  },
+  content: {
+    color: 'Crimson',
+    fontSize: '12px',
+    lineHeight: '14px',
+    fontWeight: 'light',
+    textAlign: 'left',
+    padding: '10px'
+  },
+  container: {
+    background: 'GhostWhite',
+    padding: 0,
+    borderRadius: '5px',
+    position: 'relative',
+    overflow: 'hidden',
+    maxHeight: '0',
+    transition: 'all 500ms ease'
+  },
+  containerActive: {
+    background: 'GhostWhite',
+    padding: 0,
+    borderRadius: '5px',
+    position: 'relative',
+    overflow: 'hidden',
+    maxHeight: '500px',
+    transition: 'all 500ms ease'
+  }
+};
 
 const ErrorComponent = ({ error, title, onToggle, show, debug }) => (
   <div>
-    <Title>There was a mistake!</Title>
+    <h3 style={style.title}>There was a mistake!</h3>
     {debug ? (
       <div>
-        <Subtitle>{title}</Subtitle>
-        <Button onClick={onToggle}>{show ? 'See less' : 'See more'}</Button>
-        <Container active={show}>
-          <Content dangerouslySetInnerHTML={{ __html: error }} />
-        </Container>
+        <h4 style={style.subtitle}>{title}</h4>
+        <button style={style.button} onClick={onToggle}>
+          {show ? 'See less' : 'See more'}
+        </button>
+        <div style={show ? style.containerActive : style.container}>
+          <div
+            style={style.content}
+            dangerouslySetInnerHTML={{ __html: error }}
+          />
+        </div>
       </div>
     ) : (
       false
