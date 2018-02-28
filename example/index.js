@@ -5,6 +5,7 @@ import WithErrors from './withErrors';
 import WithModal from './withModal';
 import WaitFor from './waitFor';
 import WithActions from './withActions';
+import WithForm from './withForm';
 
 const Card = ({ title, children }) => (
   <div className="card">
@@ -31,6 +32,10 @@ const App = (
     <br />
     <Card title="With Actions">
       <WithActions />
+    </Card>
+    <br />
+    <Card title="With Form">
+      <WithForm />
     </Card>
   </div>
 );
