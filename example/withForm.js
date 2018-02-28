@@ -55,8 +55,9 @@ export default compose(
       name: { value: '', required: true },
       email: { value: '', required: true }
     },
-    ({ setSubmit }) => () => {
-      setSubmit(true);
+    props => () => {
+      props.setSubmit(true);
+      props.resetForm();
     }
   ),
   pure
