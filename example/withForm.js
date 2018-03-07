@@ -2,8 +2,15 @@ import React from 'react';
 import { compose, withState, pure } from 'recompose';
 import { withForm } from '../src/index';
 
-const WithForm = ({ submitForm, updateForm, form, formError, submit }) => (
-  <form>
+const WithForm = ({
+  submitForm,
+  updateForm,
+  form,
+  formError,
+  submit,
+  formFieldsWithErrors
+}) => (
+  <form className={formError ? 'was-validated' : null}>
     {formError && (
       <div className="alert alert-danger" role="alert">
         All fields is required
@@ -21,12 +28,18 @@ const WithForm = ({ submitForm, updateForm, form, formError, submit }) => (
           type="email"
           className="form-control"
           name="email"
+          required="true"
           value={form.email}
           onChange={updateForm}
           id="email"
           placeholder="Enter your email"
         />
       </label>
+      {formFieldsWithErrors.includes('email') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          Invalid Email
+        </div>
+      )}
     </div>
     <div className="form-group">
       <label htmlFor="name">
@@ -35,12 +48,18 @@ const WithForm = ({ submitForm, updateForm, form, formError, submit }) => (
           type="text"
           className="form-control"
           name="name"
+          required="true"
           value={form.name}
           onChange={updateForm}
           id="name"
           placeholder="Enter your name"
         />
       </label>
+      {formFieldsWithErrors.includes('name') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
     </div>
     <button type="submit" className="btn btn-primary" onClick={submitForm}>
       Submit
@@ -53,7 +72,7 @@ export default compose(
   withForm(
     {
       name: { value: '', required: true },
-      email: { value: '', required: true }
+      email: { value: '', required: true, type: 'email' }
     },
     props => () => {
       props.setSubmit(true);

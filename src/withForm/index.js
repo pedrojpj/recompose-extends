@@ -14,9 +14,53 @@ const withForm = (input, handlers) => BaseComponent => {
 
       this.state = {
         form,
+        formFieldsWithErrors: [],
         formError: false
       };
     }
+
+    addError = name => {
+      this.setState(prevState => ({
+        formFieldsWithErrors: prevState.formFieldsWithErrors.includes(name)
+          ? prevState.formFieldsWithErrors
+          : [...prevState.formFieldsWithErrors, name]
+      }));
+    };
+
+    removeError = name => {
+      this.setState(prevState => ({
+        formFieldsWithErrors: prevState.formFieldsWithErrors.filter(
+          item => item !== name
+        )
+      }));
+    };
+
+    validateForm = () => {
+      let error = false;
+
+      Object.keys(input).forEach(key => {
+        if (input[key].required) {
+          if (!this.state.form[key]) {
+            this.addError(key);
+            error = true;
+          } else {
+            this.removeError(key);
+          }
+        }
+
+        if (input[key].type === 'email') {
+          const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          if (!re.test(String(this.state.form[key]).toLowerCase())) {
+            this.addError(key);
+            error = true;
+          } else {
+            this.removeError(key);
+          }
+        }
+      });
+
+      return error;
+    };
 
     updateForm = ({ target }) => {
       const { name, value } = target;
@@ -27,21 +71,26 @@ const withForm = (input, handlers) => BaseComponent => {
         );
       }
 
-      this.setState(prevState => ({
-        form: { ...prevState.form, [name]: value }
-      }));
+      this.setState(
+        prevState => ({
+          form: { ...prevState.form, [name]: value }
+        }),
+        () => {
+          this.validateForm();
+        }
+      );
     };
 
     submitForm = event => {
       let error = false;
 
-      Object.keys(input).forEach(key => {
-        if (input[key].required) {
-          if (!this.state.form[key]) {
-            error = true;
-          }
-        }
-      });
+      if (this.validateForm()) {
+        error = true;
+      }
+
+      if (this.state.formFieldsWithErrors.length) {
+        error = true;
+      }
 
       if (!error) {
         if (handlers) {
@@ -72,11 +121,12 @@ const withForm = (input, handlers) => BaseComponent => {
     };
 
     render() {
-      const { form, formError } = this.state;
+      const { form, formError, formFieldsWithErrors } = this.state;
       const props = {
         ...this.props,
         form,
         formError,
+        formFieldsWithErrors,
         updateForm: this.updateForm,
         submitForm: this.submitForm,
         resetForm: this.resetForm

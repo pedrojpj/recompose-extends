@@ -125,4 +125,39 @@ describe('With Errors', () => {
     wrapper.find('button').simulate('click');
     expect(wrapper.find(Form).props().form.name).toBe('');
   });
+
+  it('should invalidate the form when adding an email field without email formatting', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={updateForm}
+        />
+        <button onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withState('submit', 'setSubmit', false),
+      withForm(
+        { email: { value: '', type: 'email' } },
+        ({ setSubmit, resetForm }) => () => {
+          setSubmit(true);
+          resetForm();
+        }
+      )
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper.find('input').simulate('change', {
+      target: { value: 'text', name: 'email', type: 'email' }
+    });
+
+    expect(wrapper.find(Form).props().form.email).toBe('text');
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find(Form).props().formFieldsWithErrors).toContain('email');
+  });
 });
