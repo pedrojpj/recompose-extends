@@ -61,6 +61,26 @@ const WithForm = ({
         </div>
       )}
     </div>
+    <div className="form-group">
+      <label htmlFor="password">
+        Password
+        <input
+          type="password"
+          className="form-control"
+          name="password"
+          required="true"
+          value={form.password}
+          onChange={updateForm}
+          id="password"
+          placeholder="Enter your password"
+        />
+      </label>
+      {formFieldsWithErrors.includes('password') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
     <button type="submit" className="btn btn-primary" onClick={submitForm}>
       Submit
     </button>
@@ -72,7 +92,12 @@ export default compose(
   withForm(
     {
       name: { value: '', required: true },
-      email: { value: '', required: true, type: 'email' }
+      email: { value: '', required: true, type: 'email' },
+      password: {
+        value: '',
+        required: true,
+        pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$'
+      }
     },
     props => () => {
       props.setSubmit(true);
