@@ -22,4 +22,14 @@ describe('With Errors', () => {
 
     expect(wrapper.state().hasError).toBeTruthy();
   });
+
+  it('render with custom component', () => {
+    const ErrorTemplate = example => <div>{example()}</div>;
+    const CustomComponent = () => <p>Error</p>;
+    const Component = withErrors({}, CustomComponent)(ErrorTemplate);
+    const wrapper = mount(<Component />);
+
+    expect(wrapper.state().hasError).toBeTruthy();
+    expect(wrapper.find('p').text()).toBe('Error');
+  });
 });
