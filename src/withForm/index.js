@@ -19,6 +19,20 @@ const withForm = (input, handlers) => BaseComponent => {
       };
     }
 
+    setError = name => {
+      this.addError(name);
+      this.setState(() => ({
+        formError: true
+      }));
+    };
+
+    clearError = () => {
+      this.setState(() => ({
+        formFieldsWithErrors: [],
+        formError: false
+      }));
+    };
+
     addError = name => {
       this.setState(prevState => ({
         formFieldsWithErrors: prevState.formFieldsWithErrors.includes(name)
@@ -136,6 +150,8 @@ const withForm = (input, handlers) => BaseComponent => {
         ...this.props,
         form,
         formError,
+        formSetError: this.setError,
+        formClearErrors: this.clearError,
         formFieldsWithErrors,
         updateForm: this.updateForm,
         submitForm: this.submitForm,

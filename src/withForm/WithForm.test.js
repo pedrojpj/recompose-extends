@@ -210,4 +210,40 @@ describe('With Form', () => {
     wrapper.find('button').simulate('click');
     expect(wrapper.find(Form).props().formFieldsWithErrors).toContain('email');
   });
+
+  it('should be able to add an error from the component', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={updateForm}
+        />
+        <button onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withState('submit', 'setSubmit', false),
+      withForm(
+        { name: { value: '', required: true } },
+        ({ formSetError }) => () => {
+          formSetError('name');
+        }
+      )
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper.find('input').simulate('change', {
+      target: { value: 'text', name: 'name' }
+    });
+
+    wrapper.find('button').simulate('click');
+
+    expect(wrapper.find(Form).props().formError).toBe(false);
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find(Form).props().formError).toBe(true);
+  });
 });
