@@ -14,6 +14,13 @@ Recompose Extends is a set of utilities that extends the functionality of the Re
 npm install recompose-extends --save
 ```
 
+## Demo
+
+You can see examples of the library at the following url:
+
+https://pedrojpj.github.io/recompose-extends/
+
+
 ## Higher-order components
 ### `removeProp()`
 
@@ -49,13 +56,43 @@ Wait for one or more promises before rendering the component
 
 ### `withActions()`
 
+```js
+
+export default compose(
+  withReducer('state', 'dispatch', reducer, initialState),
+  withActions({ increment, decrement }),
+  pure
+)(View);
+
+```
+
 To use with the component withReducer, you can create props as curry functions that receive the dispatch and status by default. Similar to Redux's connect
 
 ### `withErrors()`
 
+```js
+
+const WithErrors = ({ example }) => <div>{example()}</div>;
+
+export default compose(withErrors({ debug: true }), pure)(WithErrors);
+
+```
+
 Adds an error handler in the component allowing you to visualize the chain of errors in debug mode or prevent the rendering of other components from failing. Similar to the componctDidCatch of React
 
 ### `withModal()`
+
+```js
+
+export default compose(
+  withState('modal', 'setModal', false),
+  withModal(({ modal }) => modal, Modal, ({ setModal }) => ({
+    onClose: () => setModal(false)
+  })),
+  pure
+)(WithModal);
+
+```
 
 High order component used to render another component in portal mode next to our base component. Useful for manners or tooltips
 
