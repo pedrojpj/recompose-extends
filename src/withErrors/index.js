@@ -76,7 +76,8 @@ const ErrorComponent = ({ error, title, onToggle, show, debug }) => (
   </div>
 );
 
-const withErrors = (input = {}) => BaseComponent => {
+const withErrors = (input = {}, component) => BaseComponent => {
+  const factoryError = createFactory(component);
   const factory = createFactory(BaseComponent);
 
   class withErrorClass extends Component {
@@ -114,6 +115,9 @@ const withErrors = (input = {}) => BaseComponent => {
       const { errorTitle, errorInfo, showInfo, debug } = this.state;
 
       if (this.state.hasError) {
+        if (component) {
+          return factoryError(...this.props);
+        }
         return (
           <ErrorComponent
             title={errorTitle}

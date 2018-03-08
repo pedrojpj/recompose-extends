@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import WithErrors from './withErrors';
+import WithCustomErrors from './withCustomError';
 import WithModal from './withModal';
 import WaitFor from './waitFor';
 import WithActions from './withActions';
@@ -20,6 +21,10 @@ const App = (
   <div className="container">
     <Card title="With Errors">
       <WithErrors />
+    </Card>
+    <br />
+    <Card title="With Errors with custom component">
+      <WithCustomErrors />
     </Card>
     <br />
     <Card title="With Modal">

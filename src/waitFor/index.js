@@ -24,7 +24,6 @@ const waitFor = input => BaseComponent => {
       } else {
         Promise.resolve(this.props[input]())
           .then(() => {
-            console.log('loaded');
             this.setState({
               loadResolve: true
             });
