@@ -7,7 +7,7 @@ import withForm from '.';
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe('With Errors', () => {
+describe('With Form', () => {
   it('should change the value of a form field', () => {
     const Form = ({ form, updateForm }) => (
       <form>
@@ -124,6 +124,56 @@ describe('With Errors', () => {
     expect(wrapper.find(Form).props().form.name).toBe('text');
     wrapper.find('button').simulate('click');
     expect(wrapper.find(Form).props().form.name).toBe('');
+  });
+
+  it('should validate the form when I add a password field with a pattern', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input
+          type="password"
+          name="password"
+          value={form.password}
+          onChange={updateForm}
+        />
+        <button onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withState('submit', 'setSubmit', false),
+      withForm(
+        {
+          password: {
+            value: '',
+            pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$'
+          }
+        },
+        ({ setSubmit, resetForm }) => () => {
+          setSubmit(true);
+          resetForm();
+        }
+      )
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper.find('input').simulate('change', {
+      target: { value: 'example', name: 'password' }
+    });
+
+    expect(wrapper.find(Form).props().form.password).toBe('example');
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find(Form).props().formFieldsWithErrors).toContain(
+      'password'
+    );
+
+    wrapper.find('input').simulate('change', {
+      target: { value: 'examplePass12', name: 'password' }
+    });
+
+    wrapper.find('button').simulate('click');
+
+    expect(wrapper.find(Form).props().formFieldsWithErrors).toHaveLength(0);
   });
 
   it('should invalidate the form when adding an email field without email formatting', () => {

@@ -48,6 +48,16 @@ const withForm = (input, handlers) => BaseComponent => {
           }
         }
 
+        if (input[key].pattern) {
+          const pattern = new RegExp(input[key].pattern);
+          if (!pattern.test(this.state.form[key])) {
+            this.addError(key);
+            error = true;
+          } else {
+            this.removeError(key);
+          }
+        }
+
         if (input[key].type === 'email') {
           const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           if (!re.test(String(this.state.form[key]).toLowerCase())) {
