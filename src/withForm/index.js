@@ -87,7 +87,8 @@ const withForm = (input, handlers) => BaseComponent => {
     };
 
     updateForm = ({ target }) => {
-      const { name, value } = target;
+      const { name, value, type, checked } = target;
+      const field = {};
 
       if (!name) {
         console.warn(
@@ -95,9 +96,26 @@ const withForm = (input, handlers) => BaseComponent => {
         );
       }
 
+      if (type === 'checkbox') {
+        if (
+          value === 'false' ||
+          value === 'true' ||
+          value === false ||
+          value === true
+        ) {
+          field[name] = checked;
+        } else if (checked) {
+          field[name] = value;
+        } else {
+          field[name] = '';
+        }
+      } else {
+        field[name] = value;
+      }
+
       this.setState(
         prevState => ({
-          form: { ...prevState.form, [name]: value }
+          form: { ...prevState.form, ...field }
         }),
         () => {
           this.validateForm();
