@@ -81,6 +81,24 @@ const WithForm = ({
         </div>
       )}
     </div>
+    <div className="form-check">
+      <label className="form-check-label" htmlFor="exampleCheck1">
+        <input
+          type="checkbox"
+          className="form-check-input"
+          id="conditions"
+          name="conditions"
+          value={form.conditions}
+          onChange={updateForm}
+        />
+        Check me out
+      </label>
+      {formFieldsWithErrors.includes('conditions') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
     <button type="submit" className="btn btn-primary" onClick={submitForm}>
       Submit
     </button>
@@ -97,7 +115,8 @@ export default compose(
         value: '',
         required: true,
         pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$'
-      }
+      },
+      conditions: { value: false, required: true }
     },
     props => () => {
       props.setSubmit(true);

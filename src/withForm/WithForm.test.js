@@ -246,4 +246,30 @@ describe('With Form', () => {
     wrapper.find('button').simulate('click');
     expect(wrapper.find(Form).props().formError).toBe(true);
   });
+
+  it('should check the input checkbox and marked value as true', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input
+          type="checkbox"
+          name="check"
+          value={form.check}
+          onChange={updateForm}
+        />
+        <button onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({ check: { value: false, required: true } })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper.find('input').simulate('change', {
+      target: { name: 'check', type: 'checkbox', checked: true, value: 'false' }
+    });
+
+    expect(wrapper.find(Form).props().form.check).toBe(true);
+  });
 });
