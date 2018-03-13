@@ -272,4 +272,46 @@ describe('With Form', () => {
 
     expect(wrapper.find(Form).props().form.check).toBe(true);
   });
+
+  it('should check the input checkbox and marked value as the assign value', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input
+          type="checkbox"
+          name="check"
+          value={form.check}
+          onChange={updateForm}
+        />
+        <button onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({ check: { value: 'example', required: true } })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper.find('input').simulate('change', {
+      target: {
+        name: 'check',
+        type: 'checkbox',
+        checked: false,
+        value: 'example'
+      }
+    });
+
+    expect(wrapper.find(Form).props().form.check).toBe('');
+
+    wrapper.find('input').simulate('change', {
+      target: {
+        name: 'check',
+        type: 'checkbox',
+        checked: true,
+        value: 'example'
+      }
+    });
+
+    expect(wrapper.find(Form).props().form.check).toBe('example');
+  });
 });

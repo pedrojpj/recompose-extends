@@ -97,8 +97,6 @@ const withForm = (input, handlers) => BaseComponent => {
       }
 
       if (type === 'checkbox') {
-        let valueCheckbox;
-
         if (
           value === 'false' ||
           value === 'true' ||
@@ -107,7 +105,7 @@ const withForm = (input, handlers) => BaseComponent => {
         ) {
           field[name] = checked;
         } else if (checked) {
-          field[name] = valueCheckbox;
+          field[name] = value;
         } else {
           field[name] = '';
         }
