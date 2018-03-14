@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import { compose } from 'recompose';
+import { compose, withProps } from 'recompose';
 import Adapter from 'enzyme-adapter-react-16';
 
 import withModal from '.';
@@ -30,5 +30,31 @@ describe('With Modals', () => {
     const wrapper = mount(<Component isCheck />);
 
     expect(wrapper.text()).toBe('Modal');
+  });
+
+  it('should render modal without props', () => {
+    const Modal = () => <div>Modal</div>;
+    const Content = () => <div>Content</div>;
+
+    const Component = compose(
+      withProps({ extraProp: true }),
+      withModal(({ isCheck }) => isCheck, Modal, null, { includeProps: false })
+    )(Content);
+
+    const wrapper = mount(<Component isCheck />);
+    expect(wrapper.find(Modal).props().extraProp).toBeUndefined();
+  });
+
+  it('should render modal with props', () => {
+    const Modal = () => <div>Modal</div>;
+    const Content = () => <div>Content</div>;
+
+    const Component = compose(
+      withProps({ extraProp: true }),
+      withModal(({ isCheck }) => isCheck, Modal)
+    )(Content);
+
+    const wrapper = mount(<Component isCheck />);
+    expect(wrapper.find(Modal).props().extraProp).toBeDefined();
   });
 });
