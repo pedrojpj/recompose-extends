@@ -2,7 +2,12 @@ import { Component, createFactory } from 'react';
 import { createPortal } from 'react-dom';
 import { mapProps } from 'recompose';
 
-const withModal = (input, component, extraProps) => BaseComponent => {
+const withModal = (
+  input,
+  component,
+  extraProps,
+  options = { includeProps: true }
+) => BaseComponent => {
   const hoc = mapProps(props => {
     if (typeof extraProps === 'function') {
       return Object.assign({}, props, extraProps(props));
@@ -35,18 +40,26 @@ const withModal = (input, component, extraProps) => BaseComponent => {
     }
     render() {
       if (input(this.props)) {
+        let model;
+
+        console.log(options.includeProps);
+
+        if (options.includeProps) {
+          model = factoryModel(this.props);
+        } else {
+          model = factoryModel();
+        }
+
         return [
-          createPortal(factoryModel(this.props), this.el),
+          createPortal(model, this.el),
           factory({
             ...this.props,
-            ...this.handlers,
             key: 'content'
           })
         ];
       }
       return factory({
-        ...this.props,
-        ...this.handlers
+        ...this.props
       });
     }
   }
