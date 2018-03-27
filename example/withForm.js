@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, withState, pure } from 'recompose';
+import { compose, withState, withProps, pure } from 'recompose';
 import { withForm } from '../src/index';
 
 const WithForm = ({
@@ -107,17 +107,21 @@ const WithForm = ({
 
 export default compose(
   withState('submit', 'setSubmit', false),
+  withProps({
+    name: 'Peter',
+    email: 'example@example.com'
+  }),
   withForm(
-    {
-      name: { value: '', required: true },
-      email: { value: '', required: true, type: 'email' },
+    ({ name, email }) => ({
+      name: { value: name, required: true },
+      email: { value: email, required: true, type: 'email' },
       password: {
         value: '',
         required: true,
         pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$'
       },
       conditions: { value: false, required: true }
-    },
+    }),
     props => () => {
       props.setSubmit(true);
       props.resetForm();

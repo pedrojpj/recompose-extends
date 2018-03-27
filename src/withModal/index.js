@@ -42,8 +42,6 @@ const withModal = (
       if (input(this.props)) {
         let model;
 
-        console.log(options.includeProps);
-
         if (options.includeProps) {
           model = factoryModel(this.props);
         } else {
