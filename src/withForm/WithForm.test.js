@@ -337,4 +337,27 @@ describe('With Form', () => {
 
     expect(wrapper.find(Form).props().form.name).toBe('example');
   });
+
+  it('should not maintain any fields since they do not exist in the form', () => {
+    const Form = ({ form, updateForm, updateField }) => (
+      <form>
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={updateForm}
+        />
+        <button type="button" onClick={() => updateField('email', 'example')} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({ name: { value: '', required: true } })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+    wrapper.find('button').simulate('click');
+
+    expect(wrapper.find(Form).props().form.name).toBe('');
+  });
 });
