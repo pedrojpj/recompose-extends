@@ -88,6 +88,18 @@ const withForm = (input, handlers) => BaseComponent => {
       return error;
     };
 
+    updateField = (name, value) => {
+      const customField = { [name]: value };
+
+      if (name in this.state.form) {
+        this.setState(prevState => ({
+          form: { ...prevState.form, ...customField }
+        }));
+      } else {
+        console.warn('This field is not defined in the form');
+      }
+    };
+
     updateForm = ({ target }) => {
       const { name, value, type, checked } = target;
       const field = {};
@@ -173,6 +185,7 @@ const withForm = (input, handlers) => BaseComponent => {
         formSetError: this.setError,
         formClearErrors: this.clearError,
         formFieldsWithErrors,
+        updateField: this.updateField,
         updateForm: this.updateForm,
         submitForm: this.submitForm,
         resetForm: this.resetForm

@@ -314,4 +314,27 @@ describe('With Form', () => {
 
     expect(wrapper.find(Form).props().form.check).toBe('example');
   });
+
+  it('should update value of a field with updateField func', () => {
+    const Form = ({ form, updateForm, updateField }) => (
+      <form>
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={updateForm}
+        />
+        <button type="button" onClick={() => updateField('name', 'example')} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({ name: { value: '', required: true } })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+    wrapper.find('button').simulate('click');
+
+    expect(wrapper.find(Form).props().form.name).toBe('example');
+  });
 });
