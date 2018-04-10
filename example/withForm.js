@@ -18,7 +18,8 @@ const WithForm = ({
     )}
     {submit && (
       <div className="alert alert-success" role="alert">
-        The form has been sent correctly
+        The form has been sent correctly with this values:{' '}
+        {JSON.stringify(form)}
       </div>
     )}
     <div className="form-group">
@@ -81,6 +82,32 @@ const WithForm = ({
         </div>
       )}
     </div>
+
+    <div className="form-group">
+      <label htmlFor="interests">
+        Interests
+        <select
+          name="interests"
+          onChange={updateForm}
+          multiple
+          value={form.interests}
+          className="form-control"
+          id="interests"
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </select>
+      </label>
+      {formFieldsWithErrors.includes('interests') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
+
     <div className="form-check">
       <label className="form-check-label" htmlFor="exampleCheck1">
         <input
@@ -120,11 +147,11 @@ export default compose(
         required: true,
         pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$'
       },
-      conditions: { value: false, required: true }
+      conditions: { value: false, required: true },
+      interests: { value: [], required: true }
     }),
     props => () => {
       props.setSubmit(true);
-      props.resetForm();
     }
   ),
   pure

@@ -55,8 +55,17 @@ const withForm = (input, handlers) => BaseComponent => {
       let error = false;
 
       Object.keys(this.input).forEach(key => {
-        if (this.input[key].required) {
-          if (!this.state.form[key]) {
+        const element = this.input[key];
+
+        if (element.required) {
+          if (this.state.form[key] instanceof Array) {
+            if (!this.state.form[key].length) {
+              this.addError(key);
+              error = true;
+            } else {
+              this.removeError(key);
+            }
+          } else if (!this.state.form[key]) {
             this.addError(key);
             error = true;
           } else {
@@ -64,8 +73,8 @@ const withForm = (input, handlers) => BaseComponent => {
           }
         }
 
-        if (this.input[key].pattern) {
-          const pattern = new RegExp(input[key].pattern);
+        if (element.pattern) {
+          const pattern = new RegExp(element.pattern);
           if (!pattern.test(this.state.form[key])) {
             this.addError(key);
             error = true;
@@ -73,8 +82,7 @@ const withForm = (input, handlers) => BaseComponent => {
             this.removeError(key);
           }
         }
-
-        if (this.input[key].type === 'email') {
+        if (element.type === 'email') {
           const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           if (!re.test(String(this.state.form[key]).toLowerCase())) {
             this.addError(key);
@@ -89,9 +97,21 @@ const withForm = (input, handlers) => BaseComponent => {
     };
 
     updateField = (name, value) => {
-      const customField = { [name]: value };
+      let newValue;
 
       if (name in this.state.form) {
+        if (this.state.form[name] instanceof Array) {
+          if (this.state.form[name].includes(value)) {
+            newValue = this.state.form[name].filter(item => item !== value);
+          } else {
+            newValue = [...this.state.form[name], value];
+          }
+        } else {
+          newValue = value;
+        }
+
+        const customField = { [name]: newValue };
+
         this.setState(prevState => ({
           form: { ...prevState.form, ...customField }
         }));
@@ -123,10 +143,15 @@ const withForm = (input, handlers) => BaseComponent => {
         } else {
           field[name] = '';
         }
+      } else if (type === 'select-multiple') {
+        field[name] = [];
+
+        [...target.selectedOptions].map(element =>
+          field[name].push(element.value)
+        );
       } else {
         field[name] = value;
       }
-
       this.setState(
         prevState => ({
           form: { ...prevState.form, ...field }
