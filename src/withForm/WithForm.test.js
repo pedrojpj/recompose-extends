@@ -360,4 +360,74 @@ describe('With Form', () => {
 
     expect(wrapper.find(Form).props().form.name).toBe('');
   });
+
+  it('should add values to an array type field', () => {
+    const Button = ({ updateField }) => (
+      <button onClick={() => updateField('elements', 1)} />
+    );
+
+    const Component = compose(withForm({ elements: { value: [] } })(Button));
+    const wrapper = mount(<Component />);
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find(Button).props().form.elements).toContain(1);
+  });
+
+  it('should remove values to an array type field', () => {
+    const Button = ({ updateField }) => (
+      <button onClick={() => updateField('elements', 1)} />
+    );
+
+    const Component = compose(withForm({ elements: { value: [1] } })(Button));
+    const wrapper = mount(<Component />);
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find(Button).props().form.elements).toHaveLength(0);
+  });
+
+  it('should invalidate form with fields with value array empty', () => {
+    const Button = ({ submitForm }) => <button onClick={submitForm} />;
+
+    const Component = compose(
+      withForm({ elements: { value: [], required: true } })(Button)
+    );
+
+    const wrapper = mount(<Component />);
+    wrapper.find('button').simulate('click');
+    expect(wrapper.find(Button).props().formError).toBeTruthy();
+  });
+
+  it('should test select multiple', () => {
+    const Form = ({ form, updateForm }) => (
+      <form>
+        <select
+          multiple
+          name="elements"
+          value={form.elements}
+          onChange={updateForm}
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+        </select>
+      </form>
+    );
+
+    const Component = compose(
+      withForm({ elements: { value: [], required: true } })(Form)
+    );
+
+    const wrapper = mount(<Component />);
+
+    wrapper
+      .find(Form)
+      .find('select')
+      .simulate('change', {
+        target: {
+          type: 'select-multiple',
+          value: 1,
+          name: 'elements',
+          selectedOptions: [{ value: 1 }]
+        }
+      });
+
+    expect(wrapper.find(Form).props().form.elements).toContain(1);
+  });
 });
