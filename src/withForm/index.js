@@ -72,8 +72,7 @@ const withForm = (input, handlers) => BaseComponent => {
             this.removeError(key);
           }
         }
-
-        if (element.pattern) {
+        if (element.pattern && this.state.form[key]) {
           const pattern = new RegExp(element.pattern);
           if (!pattern.test(this.state.form[key])) {
             this.addError(key);

@@ -144,7 +144,6 @@ export default compose(
       email: { value: email, required: true, type: 'email' },
       password: {
         value: '',
-        required: true,
         pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$'
       },
       conditions: { value: false, required: true },
