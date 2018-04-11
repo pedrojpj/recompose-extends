@@ -111,9 +111,14 @@ const withForm = (input, handlers) => BaseComponent => {
 
         const customField = { [name]: newValue };
 
-        this.setState(prevState => ({
-          form: { ...prevState.form, ...customField }
-        }));
+        this.setState(
+          prevState => ({
+            form: { ...prevState.form, ...customField }
+          }),
+          () => {
+            this.validateForm();
+          }
+        );
       } else {
         console.warn('This field is not defined in the form');
       }
