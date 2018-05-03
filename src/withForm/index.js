@@ -190,6 +190,7 @@ const withForm = (input, handlers) => BaseComponent => {
         }));
       }
 
+      if (event)
       event.preventDefault();
     };
 
