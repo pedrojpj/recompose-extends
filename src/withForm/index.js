@@ -166,6 +166,18 @@ const withForm = (input, handlers) => BaseComponent => {
       );
     };
 
+    clearCustomError = () => {
+      const newErrors = this.state.formFieldsWithErrors.filter(r =>
+        Object.keys(this.input).includes(r)
+      );
+
+      this.setState(() => ({
+        formFieldsWithErrors: newErrors
+      }));
+
+      return newErrors.length;
+    };
+
     submitForm = event => {
       let error = false;
 
@@ -175,6 +187,10 @@ const withForm = (input, handlers) => BaseComponent => {
 
       if (this.state.formFieldsWithErrors.length) {
         error = true;
+      }
+
+      if (!this.clearCustomError()) {
+        error = false;
       }
 
       if (!error) {
@@ -190,8 +206,7 @@ const withForm = (input, handlers) => BaseComponent => {
         }));
       }
 
-      if (event)
-      event.preventDefault();
+      if (event) event.preventDefault();
     };
 
     resetForm = () => {
