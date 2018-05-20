@@ -1,7 +1,7 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { compose, withState } from 'recompose';
+import { compose, withState, withHandlers } from 'recompose';
 
 import withForm from '.';
 
@@ -20,7 +20,7 @@ describe('With Form', () => {
       </form>
     );
 
-    const Component = withForm({ name: { value: '' } })(Form);
+    const Component = withForm({ namae: { value: '' } })(Form);
     const wrapper = mount(<Component />);
 
     wrapper
@@ -231,7 +231,13 @@ describe('With Form', () => {
         ({ formSetError }) => () => {
           formSetError('name');
         }
-      )
+      ),
+      withHandlers({
+        addError: ({ formSetError }) => () => {
+          formSetError('name');
+        },
+        checkErrors: ({ formFieldsWithErrors }) => () => formFieldsWithErrors
+      })
     )(Form);
 
     const wrapper = mount(<Component />);
@@ -243,8 +249,16 @@ describe('With Form', () => {
     wrapper.find('button').simulate('click');
 
     expect(wrapper.find(Form).props().formError).toBe(false);
-    wrapper.find('button').simulate('click');
-    expect(wrapper.find(Form).props().formError).toBe(true);
+    wrapper
+      .find(Form)
+      .props()
+      .addError();
+    expect(
+      wrapper
+        .find(Form)
+        .props()
+        .checkErrors()
+    ).toContain('name');
   });
 
   it('should check the input checkbox and marked value as true', () => {
@@ -429,5 +443,50 @@ describe('With Form', () => {
       });
 
     expect(wrapper.find(Form).props().form.elements).toContain(1);
+  });
+
+  it('should add a custom error and then remove it when submitting form', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({ elements: { value: [], required: true } }),
+      withHandlers({
+        addCustomError: ({ formSetError }) => () => {
+          formSetError('invalid');
+        },
+        checkError: ({ formFieldsWithErrors }) => () => formFieldsWithErrors
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper
+      .find(Form)
+      .props()
+      .addCustomError();
+
+    expect(
+      wrapper
+        .find(Form)
+        .props()
+        .checkError()
+    ).toContain('invalid');
+
+    wrapper
+      .find(Form)
+      .props()
+      .submitForm();
+
+    expect(
+      wrapper
+        .find(Form)
+        .props()
+        .checkError()
+    ).toHaveLength(0);
   });
 });

@@ -35,12 +35,15 @@ const withForm = (input, handlers) => BaseComponent => {
       }));
     };
 
-    addError = name => {
-      this.setState(prevState => ({
-        formFieldsWithErrors: prevState.formFieldsWithErrors.includes(name)
-          ? prevState.formFieldsWithErrors
-          : [...prevState.formFieldsWithErrors, name]
-      }));
+    addError = (name, callback) => {
+      this.setState(
+        prevState => ({
+          formFieldsWithErrors: prevState.formFieldsWithErrors.includes(name)
+            ? prevState.formFieldsWithErrors
+            : [...prevState.formFieldsWithErrors, name]
+        }),
+        callback && callback()
+      );
     };
 
     removeError = name => {
@@ -166,32 +169,46 @@ const withForm = (input, handlers) => BaseComponent => {
       );
     };
 
+    clearCustomError = callback => {
+      const newErrors = this.state.formFieldsWithErrors.filter(r =>
+        Object.keys(this.input).includes(r)
+      );
+
+      this.setState(
+        () => ({
+          formFieldsWithErrors: newErrors
+        }),
+        callback && callback()
+      );
+    };
+
     submitForm = event => {
       let error = false;
 
-      if (this.validateForm()) {
-        error = true;
-      }
-
-      if (this.state.formFieldsWithErrors.length) {
-        error = true;
-      }
-
-      if (!error) {
-        if (handlers) {
-          this.handlers(this.state.form);
+      this.clearCustomError(() => {
+        if (this.validateForm()) {
+          error = true;
         }
-        this.setState(() => ({
-          formError: false
-        }));
-      } else {
-        this.setState(() => ({
-          formError: true
-        }));
-      }
 
-      if (event)
-      event.preventDefault();
+        if (this.state.formFieldsWithErrors.length) {
+          error = true;
+        }
+
+        if (!error) {
+          if (handlers) {
+            this.handlers(this.state.form);
+          }
+          this.setState(() => ({
+            formError: false
+          }));
+        } else {
+          this.setState(() => ({
+            formError: true
+          }));
+        }
+      });
+
+      if (event) event.preventDefault();
     };
 
     resetForm = () => {
