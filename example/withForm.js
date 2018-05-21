@@ -135,8 +135,8 @@ const WithForm = ({
 export default compose(
   withState('submit', 'setSubmit', false),
   withProps({
-    name: 'Peter',
-    email: 'example@example.com'
+    name: '',
+    email: ''
   }),
   withForm(
     ({ name, email }) => ({
