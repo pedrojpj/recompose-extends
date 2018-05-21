@@ -171,13 +171,15 @@ const withForm = (input, handlers) => BaseComponent => {
 
     clearCustomError = callback => {
       const newErrors = this.state.formFieldsWithErrors.filter(
-        r => Object.keys(this.input).indexOf(r) > -1
+        r => !Object.keys(this.input).includes(r)
       );
 
       if (newErrors.length) {
         this.setState(
-          () => ({
-            formFieldsWithErrors: newErrors
+          prevState => ({
+            formFieldsWithErrors: prevState.formFieldsWithErrors.filter(
+              error => !newErrors.includes(error)
+            )
           }),
           callback && callback()
         );
