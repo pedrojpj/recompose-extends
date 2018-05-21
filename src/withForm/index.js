@@ -170,16 +170,22 @@ const withForm = (input, handlers) => BaseComponent => {
     };
 
     clearCustomError = callback => {
-      const newErrors = this.state.formFieldsWithErrors.filter(r =>
-        Object.keys(this.input).includes(r)
+      const newErrors = this.state.formFieldsWithErrors.filter(
+        r => !Object.keys(this.input).includes(r)
       );
 
-      this.setState(
-        () => ({
-          formFieldsWithErrors: newErrors
-        }),
-        callback && callback()
-      );
+      if (newErrors.length) {
+        this.setState(
+          prevState => ({
+            formFieldsWithErrors: prevState.formFieldsWithErrors.filter(
+              error => !newErrors.includes(error)
+            )
+          }),
+          callback && callback()
+        );
+      } else {
+        callback();
+      }
     };
 
     submitForm = event => {

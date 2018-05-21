@@ -487,6 +487,6 @@ describe('With Form', () => {
         .find(Form)
         .props()
         .checkError()
-    ).toHaveLength(0);
+    ).toContain('elements');
   });
 });
