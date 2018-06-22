@@ -128,7 +128,7 @@ const withForm = (input, handlers) => BaseComponent => {
       }
     };
 
-    updateForm = ({ target }, callback) => {
+    updateForm = ({ target }) => {
       const { name, value, type, checked } = target;
       const field = {};
 
@@ -166,7 +166,6 @@ const withForm = (input, handlers) => BaseComponent => {
         }),
         () => {
           this.validateForm();
-          if (callback) callback();
         }
       );
     };
