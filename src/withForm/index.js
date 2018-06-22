@@ -98,7 +98,7 @@ const withForm = (input, handlers) => BaseComponent => {
       return error;
     };
 
-    updateField = (name, value) => {
+    updateField = (name, value, callback) => {
       let newValue;
 
       if (name in this.state.form) {
@@ -120,6 +120,7 @@ const withForm = (input, handlers) => BaseComponent => {
           }),
           () => {
             this.validateForm();
+            if (callback) callback();
           }
         );
       } else {
@@ -127,7 +128,7 @@ const withForm = (input, handlers) => BaseComponent => {
       }
     };
 
-    updateForm = ({ target }) => {
+    updateForm = ({ target }, callback) => {
       const { name, value, type, checked } = target;
       const field = {};
 
@@ -165,6 +166,7 @@ const withForm = (input, handlers) => BaseComponent => {
         }),
         () => {
           this.validateForm();
+          if (callback) callback();
         }
       );
     };
