@@ -197,10 +197,6 @@ const withForm = (input, handlers) => BaseComponent => {
           error = true;
         }
 
-        if (this.state.formFieldsWithErrors.length) {
-          error = true;
-        }
-
         if (!error) {
           if (handlers) {
             this.handlers(this.state.form);
