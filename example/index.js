@@ -7,6 +7,7 @@ import WithModal from './withModal';
 import WaitFor from './waitFor';
 import WithActions from './withActions';
 import WithForm from './withForm';
+import WithRefs from './withRefs';
 
 const Card = ({ title, children }) => (
   <div className="card">
@@ -41,6 +42,9 @@ const App = (
     <br />
     <Card title="With Form">
       <WithForm />
+    </Card>
+    <Card title="With Refs">
+      <WithRefs />
     </Card>
   </div>
 );

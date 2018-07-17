@@ -124,6 +124,31 @@ const enhance = compose(
 
 High order component that allows to manage a form, includes validation of required fields
 
+### `withRefs()`
+
+```js
+
+const WithRefs = ({ setRef }) => (
+  <button className="btn btn-primary" ref={r => setRef('button', r)}>
+    Example
+  </button>
+);
+
+export default compose(
+  withRefs(),
+  lifecycle({
+    componentDidMount() {
+      console.log(this.props.getRef('button'));
+    }
+  }),
+  pure
+)(WithRefs);
+
+
+```
+
+High order component for easy access to React refs using recompose
+
 
 
 
