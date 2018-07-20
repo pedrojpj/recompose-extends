@@ -157,7 +157,7 @@ const Component = ({ ComponentButton }) => <div>{ComponentButton}</div>;
 
 
 const WithChildren = compose(
-  withChildren(['button]),
+  withChildren(['button']),
 )(Component);
 
 
