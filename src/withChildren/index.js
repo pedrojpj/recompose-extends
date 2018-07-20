@@ -14,10 +14,14 @@ const withChildren = input =>
 
     input.map(item => {
       const elements = selectChildren.filter(i => i.type === item);
+      let componentName;
+      if (item instanceof Function) {
+        componentName = item.displayName ? item.displayName : item.name;
+      } else {
+        componentName = item;
+      }
 
-      const name = `Component${capitalizeFirstLetter(
-        item instanceof Function ? item.name : item
-      )}`;
+      const name = `Component${capitalizeFirstLetter(componentName)}`;
 
       if (elements.length > 1) {
         componentProps[name] = elements;
