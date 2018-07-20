@@ -5,6 +5,7 @@ import waitFor from './waitFor';
 import withActions from './withActions';
 import withForm from './withForm';
 import withRefs from './withRefs';
+import withChildren from './withChildren';
 
 export {
   withErrors,
@@ -13,5 +14,6 @@ export {
   waitFor,
   withActions,
   withForm,
-  withRefs
+  withRefs,
+  withChildren
 };

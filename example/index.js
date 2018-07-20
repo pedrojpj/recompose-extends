@@ -8,6 +8,7 @@ import WaitFor from './waitFor';
 import WithActions from './withActions';
 import WithForm from './withForm';
 import WithRefs from './withRefs';
+import WithChildren from './withChildren';
 
 const Card = ({ title, children }) => (
   <div className="card">
@@ -43,9 +44,18 @@ const App = (
     <Card title="With Form">
       <WithForm />
     </Card>
+    <br />
     <Card title="With Refs">
       <WithRefs />
     </Card>
+    <br />
+    <Card title="With Children">
+      <WithChildren>
+        <button className="btn btn-primary">Button</button>
+        <div>1</div>
+      </WithChildren>
+    </Card>
+    <br />
   </div>
 );
 
