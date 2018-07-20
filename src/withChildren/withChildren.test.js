@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import { compose } from 'recompose';
+import { compose, setDisplayName, pure } from 'recompose';
 import Adapter from 'enzyme-adapter-react-16';
 
 import withChildren from '.';
@@ -108,5 +108,22 @@ describe('With Children', () => {
     const Component = compose(withChildren(['button']))(Content);
     const wrapper = mount(<Component />);
     expect(wrapper.find(Content).props().ComponentButton).toBeUndefined();
+  });
+
+  it('should assign the displayName', () => {
+    const Content = () => <div />;
+    const CustomComponent = () => <div>Hello</div>;
+    const CustomComponentEnhance = compose(setDisplayName('enhance'), pure)(
+      CustomComponent
+    );
+
+    const Component = compose(withChildren([CustomComponentEnhance]))(Content);
+    const wrapper = mount(
+      <Component>
+        <CustomComponentEnhance />
+      </Component>
+    );
+
+    expect(wrapper.find(Content).props().ComponentEnhance).toBeDefined();
   });
 });
