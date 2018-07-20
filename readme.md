@@ -149,6 +149,26 @@ export default compose(
 
 High order component for easy access to React refs using recompose
 
+### `withChildren()`
+
+```js
+
+const Component = ({ ComponentButton }) => <div>{ComponentButton}</div>;
+
+
+const WithChildren = compose(
+  withChildren(['button']),
+)(Component);
+
+
+<WithChildren><button>Example</button><div /></WithChildren>
+
+
+```
+
+High order component for to filter and select children, destroy the children by building a prop for each of the selected children to place them in the parent as you wish
+
+
 
 
 
