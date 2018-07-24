@@ -524,4 +524,41 @@ describe('With Form', () => {
 
     expect(wrapper.find('div').html()).toContain('3');
   });
+
+  it('should add with updateField a element to array of objects', () => {
+    const Form = ({ form }) => (
+      <div>{form.elements[2] && form.elements[2].value}</div>
+    );
+
+    const Component = compose(
+      withForm({
+        elements: {
+          value: [{ id: 1, value: 1 }, { id: 2, value: 2 }],
+          required: true
+        }
+      }),
+      withHandlers({
+        updateFieldObject: ({ updateField }) => () => {
+          updateField('elements', { id: 3, value: 4 });
+        },
+        submit: ({ submitForm }) => () => {
+          submitForm();
+        }
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper
+      .find(Form)
+      .props()
+      .updateFieldObject();
+
+    wrapper
+      .find(Form)
+      .props()
+      .submit();
+
+    expect(wrapper.find('div').html()).toContain('4');
+  });
 });

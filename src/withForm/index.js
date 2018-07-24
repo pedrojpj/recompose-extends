@@ -116,12 +116,20 @@ const withForm = (input, handlers) => BaseComponent => {
           }
 
           if (Object.values(this.state.form[name])[0] instanceof Object) {
-            newValue = this.state.form[name].map(
-              item =>
-                Object.values(item)[0] === Object.values(value)[0]
-                  ? value
-                  : item
+            const checkIfExistValue = this.state.form[name].find(
+              item => Object.values(item)[0] === Object.values(value)[0]
             );
+
+            if (checkIfExistValue) {
+              newValue = this.state.form[name].map(
+                item =>
+                  Object.values(item)[0] === Object.values(value)[0]
+                    ? value
+                    : item
+              );
+            } else {
+              newValue = [...this.state.form[name], value];
+            }
           }
         } else {
           newValue = value;
