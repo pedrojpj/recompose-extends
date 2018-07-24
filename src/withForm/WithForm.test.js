@@ -380,7 +380,7 @@ describe('With Form', () => {
       <button onClick={() => updateField('elements', 1)} />
     );
 
-    const Component = compose(withForm({ elements: { value: [] } })(Button));
+    const Component = compose(withForm({ elements: { value: [] } }))(Button);
     const wrapper = mount(<Component />);
     wrapper.find('button').simulate('click');
     expect(wrapper.find(Button).props().form.elements).toContain(1);
@@ -391,7 +391,7 @@ describe('With Form', () => {
       <button onClick={() => updateField('elements', 1)} />
     );
 
-    const Component = compose(withForm({ elements: { value: [1] } })(Button));
+    const Component = compose(withForm({ elements: { value: [1] } }))(Button);
     const wrapper = mount(<Component />);
     wrapper.find('button').simulate('click');
     expect(wrapper.find(Button).props().form.elements).toHaveLength(0);
@@ -401,8 +401,8 @@ describe('With Form', () => {
     const Button = ({ submitForm }) => <button onClick={submitForm} />;
 
     const Component = compose(
-      withForm({ elements: { value: [], required: true } })(Button)
-    );
+      withForm({ elements: { value: [], required: true } })
+    )(Button);
 
     const wrapper = mount(<Component />);
     wrapper.find('button').simulate('click');
@@ -425,8 +425,8 @@ describe('With Form', () => {
     );
 
     const Component = compose(
-      withForm({ elements: { value: [], required: true } })(Form)
-    );
+      withForm({ elements: { value: [], required: true } })
+    )(Form);
 
     const wrapper = mount(<Component />);
 
@@ -488,5 +488,40 @@ describe('With Form', () => {
         .props()
         .checkError()
     ).toContain('elements');
+  });
+
+  it('should update with updateField array of objects', () => {
+    const Form = ({ form }) => <div>{form.elements[0].value}</div>;
+
+    const Component = compose(
+      withForm({
+        elements: {
+          value: [{ id: 1, value: 1 }, { id: 2, value: 2 }],
+          required: true
+        }
+      }),
+      withHandlers({
+        updateFieldObject: ({ updateField }) => () => {
+          updateField('elements', { id: 1, value: 3 });
+        },
+        submit: ({ submitForm }) => () => {
+          submitForm();
+        }
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper
+      .find(Form)
+      .props()
+      .updateFieldObject();
+
+    wrapper
+      .find(Form)
+      .props()
+      .submit();
+
+    expect(wrapper.find('div').html()).toContain('3');
   });
 });
