@@ -104,9 +104,24 @@ const withForm = (input, handlers) => BaseComponent => {
       if (name in this.state.form) {
         if (this.state.form[name] instanceof Array) {
           if (this.state.form[name].includes(value)) {
-            newValue = this.state.form[name].filter(item => item !== value);
+            if (Object.values(this.state.form[name])[0] instanceof Object) {
+              newValue = this.state.form[name].filter(
+                item => Object.values(item)[0] === Object.valies(value)[0]
+              );
+            } else {
+              newValue = this.state.form[name].filter(item => item !== value);
+            }
           } else {
             newValue = [...this.state.form[name], value];
+          }
+
+          if (Object.values(this.state.form[name])[0] instanceof Object) {
+            newValue = this.state.form[name].map(
+              item =>
+                Object.values(item)[0] === Object.values(value)[0]
+                  ? value
+                  : item
+            );
           }
         } else {
           newValue = value;
@@ -119,6 +134,7 @@ const withForm = (input, handlers) => BaseComponent => {
             form: { ...prevState.form, ...customField }
           }),
           () => {
+            console.log(this.state.form);
             this.validateForm();
             if (callback) callback();
           }
