@@ -134,7 +134,6 @@ const withForm = (input, handlers) => BaseComponent => {
             form: { ...prevState.form, ...customField }
           }),
           () => {
-            console.log(this.state.form);
             this.validateForm();
             if (callback) callback();
           }
