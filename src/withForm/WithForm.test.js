@@ -586,4 +586,41 @@ describe('With Form', () => {
     wrapper.find('input').simulate('change', newEvent);
     expect(wrapper.find(Form).props().formIsChanged).toBeFalsy();
   });
+
+  it('should match the value of the two fields', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="password" value={form.password} onChange={updateForm} />
+        <input
+          name="repeatPassword"
+          value={form.repeatPassword}
+          onChange={updateForm}
+        />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({
+        password: { value: '', required: true, match: 'repeatPassword' },
+        repeatPassword: { value: '', required: true, match: 'password' }
+      }),
+      withHandlers({
+        checkChanged: ({ formIsChanged }) => () => formIsChanged
+      })
+    )(Form);
+
+    let event;
+
+    const wrapper = mount(<Component />);
+    event = { target: { name: 'password', value: '1234' } };
+    wrapper.find('input[name="password"]').simulate('change', event);
+    expect(wrapper.find(Form).props().formFieldsWithErrors).toHaveLength(2);
+    event = { target: { name: 'repeatPassword', value: '1234' } };
+    wrapper.find('input[name="repeatPassword"]').simulate('change', event);
+    expect(wrapper.find(Form).props().formFieldsWithErrors).toHaveLength(0);
+    event = { target: { name: 'password', value: '123' } };
+    wrapper.find('input[name="password"]').simulate('change', event);
+    expect(wrapper.find(Form).props().formFieldsWithErrors).toHaveLength(2);
+  });
 });
