@@ -63,48 +63,43 @@ const withForm = (input, handlers) => BaseComponent => {
       Object.keys(this.input).forEach(key => {
         const element = this.input[key];
 
+        const errorArray = [];
+
         if (element.required) {
           if (this.state.form[key] instanceof Array) {
             if (!this.state.form[key].length) {
-              this.addError(key);
-              error = true;
-            } else {
-              this.removeError(key);
+              errorArray.push('required');
             }
           } else if (!this.state.form[key]) {
-            this.addError(key);
-            error = true;
-          } else {
-            this.removeError(key);
+            errorArray.push('required');
           }
         }
 
         if (element.match) {
           if (this.state.form[key] !== this.state.form[element.match]) {
-            this.addError(key);
-            error = true;
-          } else {
-            this.removeError(key);
+            errorArray.push('match');
           }
         }
 
         if (element.pattern && this.state.form[key]) {
           const pattern = new RegExp(element.pattern);
           if (!pattern.test(this.state.form[key])) {
-            this.addError(key);
-            error = true;
-          } else {
-            this.removeError(key);
+            errorArray.push('pattern');
           }
         }
+
         if (element.type === 'email') {
           const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           if (!re.test(String(this.state.form[key]).toLowerCase())) {
-            this.addError(key);
-            error = true;
-          } else {
-            this.removeError(key);
+            errorArray.push('email');
           }
+        }
+
+        if (errorArray.length > 0) {
+          this.addError(key);
+          error = true;
+        } else {
+          this.removeError(key);
         }
       });
 

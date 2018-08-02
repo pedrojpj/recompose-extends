@@ -78,7 +78,28 @@ const WithForm = ({
       </label>
       {formFieldsWithErrors.includes('password') && (
         <div className="invalid-feedback" style={{ display: 'block' }}>
-          This field is required
+          This field is required or invalid
+        </div>
+      )}
+    </div>
+
+    <div className="form-group">
+      <label htmlFor="password">
+        Repeat Password
+        <input
+          type="password"
+          className="form-control"
+          name="repeatPassword"
+          required="true"
+          value={form.repeatPassword}
+          onChange={updateForm}
+          id="repeatPassword"
+          placeholder="Repeat your password"
+        />
+      </label>
+      {formFieldsWithErrors.includes('repeatPassword') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required or invalid
         </div>
       )}
     </div>
@@ -144,7 +165,13 @@ export default compose(
       email: { value: email, required: true, type: 'email' },
       password: {
         value: '',
-        pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$'
+        pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$',
+        match: 'repeatPassword'
+      },
+      repeatPassword: {
+        value: '',
+        pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$',
+        match: 'password'
       },
       conditions: { value: false, required: true },
       interests: { value: [], required: true }
