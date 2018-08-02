@@ -401,8 +401,8 @@ describe('With Form', () => {
     const Button = ({ submitForm }) => <button onClick={submitForm} />;
 
     const Component = compose(
-      withForm({ elements: { value: [], required: true } })
-    )(Button);
+      withForm({ elements: { value: [], required: true } })(Button)
+    );
 
     const wrapper = mount(<Component />);
     wrapper.find('button').simulate('click');
@@ -560,5 +560,30 @@ describe('With Form', () => {
       .submit();
 
     expect(wrapper.find('div').html()).toContain('4');
+  });
+
+  it('should test that the form has changed', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({ name: { value: 'Peter', required: true } }),
+      withHandlers({
+        checkChanged: ({ formIsChanged }) => () => formIsChanged
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+    const event = { target: { name: 'name', value: 'Thomas' } };
+    expect(wrapper.find(Form).props().formIsChanged).toBeFalsy();
+    wrapper.find('input').simulate('change', event);
+    expect(wrapper.find(Form).props().formIsChanged).toBeTruthy();
+    const newEvent = { target: { name: 'name', value: 'Peter' } };
+    wrapper.find('input').simulate('change', newEvent);
+    expect(wrapper.find(Form).props().formIsChanged).toBeFalsy();
   });
 });

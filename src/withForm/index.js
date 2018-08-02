@@ -14,10 +14,13 @@ const withForm = (input, handlers) => BaseComponent => {
         form[key] = this.input[key].value;
       });
 
+      this.originalForm = form;
+
       this.state = {
         form,
         formFieldsWithErrors: [],
-        formError: false
+        formError: false,
+        formIsChanged: false
       };
     }
 
@@ -143,6 +146,7 @@ const withForm = (input, handlers) => BaseComponent => {
           }),
           () => {
             this.validateForm();
+            this.checkIfIsChanged();
             if (callback) callback();
           }
         );
@@ -183,14 +187,29 @@ const withForm = (input, handlers) => BaseComponent => {
       } else {
         field[name] = value;
       }
+
       this.setState(
         prevState => ({
           form: { ...prevState.form, ...field }
         }),
         () => {
           this.validateForm();
+          this.checkIfIsChanged();
         }
       );
+    };
+
+    checkIfIsChanged = () => {
+      let isChanged = false;
+      if (
+        JSON.stringify(this.state.form) !== JSON.stringify(this.originalForm)
+      ) {
+        isChanged = true;
+      }
+
+      this.setState(() => ({
+        formIsChanged: isChanged
+      }));
     };
 
     clearCustomError = callback => {
@@ -250,11 +269,17 @@ const withForm = (input, handlers) => BaseComponent => {
     };
 
     render() {
-      const { form, formError, formFieldsWithErrors } = this.state;
+      const {
+        form,
+        formError,
+        formFieldsWithErrors,
+        formIsChanged
+      } = this.state;
       const props = {
         ...this.props,
         form,
         formError,
+        formIsChanged,
         formSetError: this.setError,
         formClearErrors: this.clearError,
         formFieldsWithErrors,
