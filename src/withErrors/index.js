@@ -116,7 +116,12 @@ const withErrors = (input = {}, component) => BaseComponent => {
 
       if (this.state.hasError) {
         if (component) {
-          return factoryError(...this.props);
+          return factoryError({
+            ...this.props,
+            error: errorInfo,
+            title: errorTitle,
+            debug
+          });
         }
         return (
           <ErrorComponent
