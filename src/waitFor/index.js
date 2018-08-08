@@ -1,7 +1,9 @@
 import { Component, createFactory } from 'react';
 
-const waitFor = input => BaseComponent => {
+const waitFor = (input, loadingComponent) => BaseComponent => {
   const factory = createFactory(BaseComponent);
+  const factoryLoading = createFactory(loadingComponent);
+
   class WaitFor extends Component {
     constructor(props) {
       super(props);
@@ -17,16 +19,16 @@ const waitFor = input => BaseComponent => {
         input.map(item => array.push(this.props[item]()));
 
         Promise.all(array).then(() => {
-          this.setState({
+          this.setState(() => ({
             loadResolve: true
-          });
+          }));
         });
       } else {
         Promise.resolve(this.props[input]())
           .then(() => {
-            this.setState({
+            this.setState(() => ({
               loadResolve: true
-            });
+            }));
           })
           .catch(error => {
             throw error;
@@ -35,9 +37,14 @@ const waitFor = input => BaseComponent => {
     }
 
     render() {
+      if (!this.state.loadResolve && loadingComponent) {
+        return factoryLoading();
+      }
+
       return this.state.loadResolve
         ? factory({
-            ...this.props
+            ...this.props,
+            waitForIsLoad: this.state.loadResolve
           })
         : null;
     }

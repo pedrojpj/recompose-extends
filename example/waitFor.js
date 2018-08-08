@@ -6,20 +6,20 @@ const WaitFor = ({ items }) => (
   <ul>{items.map(item => <li key={item}>{item}</li>)}</ul>
 );
 
+const LoadingComponent = () => <div>Loading...</div>;
+
 export default compose(
   withState('items', 'setItems', []),
   withHandlers({
     loadContent: ({ setItems }) => () =>
-      new Promise(
-        resolve =>
-          setTimeout(() => {
-            const items = ['Cat', 'Dog'];
-            setItems(items);
-            resolve(true);
-          }),
-        300
+      new Promise(resolve =>
+        setTimeout(() => {
+          const items = ['Cat', 'Dog'];
+          setItems(items);
+          resolve(true);
+        }, 5000)
       )
   }),
-  waitFor('loadContent'),
+  waitFor('loadContent', LoadingComponent),
   pure
 )(WaitFor);
