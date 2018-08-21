@@ -5,6 +5,7 @@ import { withForm } from '../src/index';
 const WithForm = ({
   submitForm,
   updateForm,
+  updateField,
   form,
   formError,
   submit,
@@ -77,6 +78,52 @@ const WithForm = ({
         />
       </label>
       {formFieldsWithErrors.includes('name') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
+    <div className="form-group">
+      <label htmlFor="country">
+        Country
+        <select
+          type="text"
+          className="form-control"
+          name="country"
+          required="true"
+          value={form.country}
+          onChange={event => updateField(event.target.name, event.target.value)}
+          id="country"
+        >
+          <option value="">Select country</option>
+          <option value="uk">United Kingdom</option>
+          <option value="es">Spain</option>
+        </select>
+      </label>
+      {formFieldsWithErrors.includes('country') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
+    <div className="form-group">
+      <label htmlFor="copyCountry">
+        Country
+        <select
+          type="text"
+          className="form-control"
+          name="copyCountry"
+          required="true"
+          value={form.copyCountry}
+          onChange={updateForm}
+          id="copyCountry"
+        >
+          <option value="">Select country</option>
+          <option value="uk">United Kingdom</option>
+          <option value="es">Spain</option>
+        </select>
+      </label>
+      {formFieldsWithErrors.includes('copyCountry') && (
         <div className="invalid-feedback" style={{ display: 'block' }}>
           This field is required
         </div>
@@ -183,6 +230,8 @@ export default compose(
     ({ name, email }) => ({
       name: { value: name, required: true, copyTo: 'copyName' },
       copyName: { value: name, required: true },
+      country: { value: '', copyTo: 'copyCountry' },
+      copyCountry: { value: '' },
       email: { value: email, required: true, type: 'email' },
       password: {
         value: '',

@@ -49,6 +49,19 @@ const withForm = (input, handlers) => BaseComponent => {
       );
     };
 
+    updateAll = (form, callback) => {
+      this.setState(
+        () => ({
+          form
+        }),
+        () => {
+          this.validateForm();
+          this.checkIfIsChanged();
+          if (callback) callback();
+        }
+      );
+    };
+
     removeError = name => {
       this.setState(prevState => ({
         formFieldsWithErrors: prevState.formFieldsWithErrors.filter(
@@ -306,6 +319,7 @@ const withForm = (input, handlers) => BaseComponent => {
         formFieldsWithErrors,
         updateField: this.updateField,
         updateForm: this.updateForm,
+        updateAllForm: this.updateAll,
         submitForm: this.submitForm,
         resetForm: this.resetForm
       };
