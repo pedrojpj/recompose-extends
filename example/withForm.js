@@ -63,6 +63,26 @@ const WithForm = ({
       )}
     </div>
     <div className="form-group">
+      <label htmlFor="copyName">
+        Copy Name
+        <input
+          type="text"
+          className="form-control"
+          name="copyName"
+          required="true"
+          value={form.copyName}
+          onChange={updateForm}
+          id="copyName"
+          placeholder="Enter your name"
+        />
+      </label>
+      {formFieldsWithErrors.includes('name') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
+    <div className="form-group">
       <label htmlFor="password">
         Password
         <input
@@ -161,7 +181,8 @@ export default compose(
   }),
   withForm(
     ({ name, email }) => ({
-      name: { value: name, required: true },
+      name: { value: name, required: true, copyTo: 'copyName' },
+      copyName: { value: name, required: true },
       email: { value: email, required: true, type: 'email' },
       password: {
         value: '',
