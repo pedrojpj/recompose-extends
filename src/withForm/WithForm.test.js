@@ -652,4 +652,46 @@ describe('With Form', () => {
     expect(wrapper.find(Form).props().form.name).toBe('Example');
     expect(wrapper.find(Form).props().form.copyName).toBe('Example2');
   });
+
+  it('should update all form', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <input name="email" value={form.email} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({
+        name: { value: 'example', required: true },
+        email: { value: 'example@example.com', required: true }
+      }),
+      withHandlers({
+        update: ({ updateAllForm }) => () => {
+          const form = {
+            name: 'not-example',
+            email: 'not-email@email.com'
+          };
+
+          updateAllForm(form);
+        }
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    expect(wrapper.find(Form).props().form.name).toBe('example');
+    expect(wrapper.find(Form).props().form.email).toBe('example@example.com');
+
+    wrapper
+      .find(Form)
+      .props()
+      .update();
+
+    wrapper.update();
+
+    expect(wrapper.find(Form).props().form.name).toBe('not-example');
+    expect(wrapper.find(Form).props().form.email).toBe('not-email@email.com');
+  });
 });
