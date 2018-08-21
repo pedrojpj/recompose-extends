@@ -143,7 +143,16 @@ const withForm = (input, handlers) => BaseComponent => {
           newValue = value;
         }
 
-        const customField = { [name]: newValue };
+        let customField;
+
+        if (this.input[name].copyTo) {
+          customField = {
+            [name]: newValue,
+            [this.input[name].copyTo]: newValue
+          };
+        } else {
+          customField = { [name]: newValue };
+        }
 
         this.setState(
           prevState => ({
@@ -162,7 +171,7 @@ const withForm = (input, handlers) => BaseComponent => {
 
     updateForm = ({ target }) => {
       const { name, value, type, checked } = target;
-      const field = {};
+      let field = {};
 
       if (!name) {
         console.warn(
@@ -189,8 +198,15 @@ const withForm = (input, handlers) => BaseComponent => {
         [...target.selectedOptions].map(element =>
           field[name].push(element.value)
         );
-      } else {
-        field[name] = value;
+      } else if (this.input[name]) {
+        if (this.input[name].copyTo) {
+          field = {
+            [name]: value,
+            [this.input[name].copyTo]: value
+          };
+        } else {
+          field = { [name]: value };
+        }
       }
 
       this.setState(

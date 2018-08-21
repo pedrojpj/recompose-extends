@@ -20,7 +20,7 @@ describe('With Form', () => {
       </form>
     );
 
-    const Component = withForm({ namae: { value: '' } })(Form);
+    const Component = withForm({ name: { value: '' } })(Form);
     const wrapper = mount(<Component />);
 
     wrapper
@@ -622,5 +622,34 @@ describe('With Form', () => {
     event = { target: { name: 'password', value: '123' } };
     wrapper.find('input[name="password"]').simulate('change', event);
     expect(wrapper.find(Form).props().formFieldsWithErrors).toHaveLength(2);
+  });
+
+  it('should copy the value from one input to another', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <input name="copyName" value={form.copyName} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({
+        name: { value: '', required: true, copyTo: 'copyName' },
+        copyName: { value: '', required: true }
+      })
+    )(Form);
+
+    let event;
+
+    const wrapper = mount(<Component />);
+    event = { target: { name: 'name', value: 'Example' } };
+    wrapper.find('input[name="name"]').simulate('change', event);
+    expect(wrapper.find(Form).props().form.name).toBe('Example');
+    expect(wrapper.find(Form).props().form.copyName).toBe('Example');
+    event = { target: { name: 'copyName', value: 'Example2' } };
+    wrapper.find('input[name="copyName"]').simulate('change', event);
+    expect(wrapper.find(Form).props().form.name).toBe('Example');
+    expect(wrapper.find(Form).props().form.copyName).toBe('Example2');
   });
 });
