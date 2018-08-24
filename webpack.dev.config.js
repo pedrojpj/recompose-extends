@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
@@ -24,5 +25,8 @@ module.exports = {
       }
     ]
   },
-  plugins: [new webpack.EnvironmentPlugin(['NODE_ENV'])]
+  plugins: [
+    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new BundleAnalyzerPlugin()
+  ]
 };
