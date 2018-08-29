@@ -287,6 +287,8 @@ const withForm = (input, handlers) => BaseComponent => {
         }
       });
 
+      this.originalForm = this.state.form;
+
       if (event) event.preventDefault();
     };
 
