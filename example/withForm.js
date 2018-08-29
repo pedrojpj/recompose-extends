@@ -64,6 +64,26 @@ const WithForm = ({
       )}
     </div>
     <div className="form-group">
+      <label htmlFor="vat">
+        Vat
+        <input
+          type="text"
+          className="form-control"
+          name="vat"
+          required="true"
+          value={form.vat}
+          onChange={updateForm}
+          id="vat"
+          placeholder="Enter your vat"
+        />
+      </label>
+      {formFieldsWithErrors.includes('vat') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
+    <div className="form-group">
       <label htmlFor="copyName">
         Copy Name
         <input
@@ -233,6 +253,7 @@ export default compose(
       country: { value: '', copyTo: 'copyCountry' },
       copyCountry: { value: '' },
       email: { value: email, required: true, type: 'email' },
+      vat: { value: 0, required: true },
       password: {
         value: '',
         pattern: '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\\s).*$',
