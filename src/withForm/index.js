@@ -83,8 +83,12 @@ const withForm = (input, handlers) => BaseComponent => {
             if (!this.state.form[key].length) {
               errorArray.push('required');
             }
-          } else if (!this.state.form[key].toString()) {
-            errorArray.push('required');
+          } else if (!this.state.form[key]) {
+            if (this.state.form[key] === undefined) {
+              errorArray.push('required');
+            } else if (!this.state.form[key].toString()) {
+              errorArray.push('required');
+            }
           }
         }
 
