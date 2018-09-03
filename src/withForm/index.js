@@ -1,6 +1,6 @@
 import { createFactory, Component } from 'react';
 
-const withForm = (input, handlers) => BaseComponent => {
+const withForm = (input, handlers, errors) => BaseComponent => {
   const factory = createFactory(BaseComponent);
 
   class WithForm extends Component {
@@ -275,6 +275,13 @@ const withForm = (input, handlers) => BaseComponent => {
       this.clearCustomError(() => {
         if (this.validateForm()) {
           error = true;
+
+          if (errors) {
+            if (this.errors) {
+              console.log(this.state);
+              this.errors(this.state.formFieldsWithErrors);
+            }
+          }
         }
 
         if (!error) {
@@ -333,6 +340,10 @@ const withForm = (input, handlers) => BaseComponent => {
       if (handlers) {
         this.handlers =
           typeof handlers === 'function' ? handlers(props) : handlers;
+      }
+
+      if (errors) {
+        this.errors = typeof errors === 'function' ? errors(props) : errors;
       }
 
       return factory({
