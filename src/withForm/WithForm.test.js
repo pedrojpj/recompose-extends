@@ -694,4 +694,39 @@ describe('With Form', () => {
     expect(wrapper.find(Form).props().form.name).toBe('not-example');
     expect(wrapper.find(Form).props().form.email).toBe('not-email@email.com');
   });
+
+  it('should emit event error', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <input name="email" value={form.email} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withState('error', 'setError', false),
+      withForm(
+        {
+          name: { value: '', required: true },
+          email: { value: '', required: true }
+        },
+        () => {},
+        props => errors => {
+          console.log(errors);
+          props.setError(true);
+        }
+      )
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    const event = { target: { name: 'name', value: 'Example' } };
+    wrapper.find('input[name="name"]').simulate('change', event);
+
+    expect(wrapper.find(Form).props().error).toBeFalsy();
+    wrapper.find('button').simulate('click');
+    wrapper.update();
+    expect(wrapper.find(Form).props().error).toBeTruthy();
+  });
 });
