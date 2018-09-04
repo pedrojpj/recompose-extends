@@ -713,7 +713,6 @@ describe('With Form', () => {
         },
         () => {},
         props => errors => {
-          console.log(errors);
           props.setError(true);
         }
       )
@@ -728,5 +727,40 @@ describe('With Form', () => {
     wrapper.find('button').simulate('click');
     wrapper.update();
     expect(wrapper.find(Form).props().error).toBeTruthy();
+  });
+
+  it('should be able to change dynamically whether a field is required or not', () => {
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({
+        name: { value: '', required: true }
+      }),
+      withHandlers({
+        isNotRequired: ({ updateRequired }) => () => {
+          updateRequired('name', false);
+        }
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    wrapper.find('button').simulate('click');
+    wrapper.update();
+    expect(wrapper.find(Form).props().formError).toBeTruthy();
+    wrapper
+      .find(Form)
+      .props()
+      .isNotRequired();
+    wrapper.update();
+    wrapper.find('button').simulate('click');
+    wrapper.update();
+
+    expect(wrapper.find(Form).props().formError).toBeFalsy();
   });
 });
