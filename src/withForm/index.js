@@ -131,7 +131,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
           if (this.state.form[name].includes(value)) {
             if (Object.values(this.state.form[name])[0] instanceof Object) {
               newValue = this.state.form[name].filter(
-                item => Object.values(item)[0] === Object.valies(value)[0]
+                item => Object.values(item)[0] === Object.values(value)[0]
               );
             } else {
               newValue = this.state.form[name].filter(item => item !== value);
