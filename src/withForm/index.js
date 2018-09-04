@@ -31,6 +31,11 @@ const withForm = (input, handlers, errors) => BaseComponent => {
       }));
     };
 
+    updateRequired = (field, value) => {
+      this.input[field] = { ...this.input[field], required: value };
+      this.validateForm();
+    };
+
     clearError = () => {
       this.setState(() => ({
         formFieldsWithErrors: [],
@@ -278,7 +283,6 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
           if (errors) {
             if (this.errors) {
-              console.log(this.state);
               this.errors(this.state.formFieldsWithErrors);
             }
           }
@@ -334,7 +338,8 @@ const withForm = (input, handlers, errors) => BaseComponent => {
         updateForm: this.updateForm,
         updateAllForm: this.updateAll,
         submitForm: this.submitForm,
-        resetForm: this.resetForm
+        resetForm: this.resetForm,
+        updateRequired: this.updateRequired
       };
 
       if (handlers) {
