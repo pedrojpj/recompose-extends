@@ -13,7 +13,11 @@ const waitFor = (input, loadingComponent) => BaseComponent => {
       };
     }
 
-    componentDidMount() {
+    componentWillMount() {
+      this.loadFunction();
+    }
+
+    loadFunction = () => {
       if (input instanceof Array) {
         const array = [];
         input.map(item => array.push(this.props[item]()));
@@ -34,7 +38,7 @@ const waitFor = (input, loadingComponent) => BaseComponent => {
             throw error;
           });
       }
-    }
+    };
 
     render() {
       if (!this.state.loadResolve && loadingComponent) {
