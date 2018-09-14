@@ -712,7 +712,7 @@ describe('With Form', () => {
           email: { value: '', required: true }
         },
         () => {},
-        props => errors => {
+        props => () => {
           props.setError(true);
         }
       )
