@@ -11,7 +11,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
       const form = {};
       Object.keys(this.input).forEach(key => {
-        form[key] = this.input[key].value;
+        form[key] = this.input[key].value || '';
       });
 
       this.originalForm = form;
@@ -222,10 +222,18 @@ const withForm = (input, handlers, errors) => BaseComponent => {
         );
       } else if (this.input[name]) {
         if (this.input[name].copyTo) {
-          field = {
-            [name]: value,
-            [this.input[name].copyTo]: value
-          };
+          if (
+            this.state.form[name] ===
+              this.state.form[this.input[name].copyTo] ||
+            !this.state.form[this.input[name].copyTo]
+          ) {
+            field = {
+              [name]: value,
+              [this.input[name].copyTo]: value
+            };
+          } else {
+            field = { [name]: value };
+          }
         } else {
           field = { [name]: value };
         }

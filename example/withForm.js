@@ -64,26 +64,6 @@ const WithForm = ({
       )}
     </div>
     <div className="form-group">
-      <label htmlFor="vat">
-        Vat
-        <input
-          type="text"
-          className="form-control"
-          name="vat"
-          required="true"
-          value={form.vat}
-          onChange={updateForm}
-          id="vat"
-          placeholder="Enter your vat"
-        />
-      </label>
-      {formFieldsWithErrors.includes('vat') && (
-        <div className="invalid-feedback" style={{ display: 'block' }}>
-          This field is required
-        </div>
-      )}
-    </div>
-    <div className="form-group">
       <label htmlFor="copyName">
         Copy Name
         <input
@@ -103,6 +83,27 @@ const WithForm = ({
         </div>
       )}
     </div>
+    <div className="form-group">
+      <label htmlFor="vat">
+        Vat
+        <input
+          type="text"
+          className="form-control"
+          name="vat"
+          required="true"
+          value={form.vat}
+          onChange={updateForm}
+          id="vat"
+          placeholder="Enter your vat"
+        />
+      </label>
+      {formFieldsWithErrors.includes('vat') && (
+        <div className="invalid-feedback" style={{ display: 'block' }}>
+          This field is required
+        </div>
+      )}
+    </div>
+
     <div className="form-group">
       <label htmlFor="country">
         Country
