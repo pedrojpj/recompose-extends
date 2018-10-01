@@ -11,7 +11,16 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
       const form = {};
       Object.keys(this.input).forEach(key => {
-        form[key] = this.input[key].value || '';
+        let value = '';
+
+        if (
+          this.input[key].value !== undefined ||
+          this.input[key].value !== null
+        ) {
+          value = this.input[key].value;
+        }
+
+        form[key] = value;
       });
 
       this.originalForm = form;
@@ -317,6 +326,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
     resetForm = () => {
       const form = {};
+
       Object.keys(this.input).forEach(key => {
         form[key] = this.input[key].value;
       });
