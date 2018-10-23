@@ -763,4 +763,70 @@ describe('With Form', () => {
 
     expect(wrapper.find(Form).props().formError).toBeFalsy();
   });
+
+  it('should empty the value of a field', () => {
+
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({
+        name: { value: 'Peter', required: true }
+      }),
+      withHandlers({
+        clearField: ({ emptyField }) => () => {
+          emptyField('name');
+        }
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    expect(wrapper.find(Form).props().form.name).toBe('Peter');
+    wrapper
+      .find(Form)
+      .props()
+      .clearField();
+
+    wrapper.update();
+    expect(wrapper.find(Form).props().form.name).toBe('');
+
+  })
+
+  it('should empty array the value of a field of type array', () => {
+
+    const Form = ({ form, updateForm, submitForm }) => (
+      <form>
+        <input name="name" value={form.name} onChange={updateForm} />
+        <button type="submit" onClick={submitForm} />
+      </form>
+    );
+
+    const Component = compose(
+      withForm({
+        name: { value: [1, 2], required: true }
+      }),
+      withHandlers({
+        clearField: ({ emptyField }) => () => {
+          emptyField('name');
+        }
+      })
+    )(Form);
+
+    const wrapper = mount(<Component />);
+
+    expect(wrapper.find(Form).props().form.name).toContain(1);
+    wrapper
+      .find(Form)
+      .props()
+      .clearField();
+
+    wrapper.update();
+    expect(wrapper.find(Form).props().form.name).toHaveLength(0);
+
+  })
 });
