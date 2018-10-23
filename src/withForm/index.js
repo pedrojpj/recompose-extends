@@ -137,6 +137,43 @@ const withForm = (input, handlers, errors) => BaseComponent => {
       return error;
     };
 
+    emptyField = (name, callback) => {
+      let newValue;
+
+      if (name in this.state.form) {
+        if (this.state.form[name] instanceof Array) {
+          newValue = []
+        } else {
+          newValue = '';
+        }
+
+        let customField;
+
+        if (this.input[name].copyTo) {
+          customField = {
+            [name]: newValue,
+            [this.input[name].copyTo]: newValue
+          };
+        } else {
+          customField = { [name]: newValue };
+        }
+
+        this.setState(
+          prevState => ({
+            form: { ...prevState.form, ...customField }
+          }),
+          () => {
+            this.validateForm();
+            this.checkIfIsChanged();
+            if (callback) callback();
+          }
+        );
+      } else {
+        console.warn('This field is not defined in the form');
+      }
+
+    }
+
     updateField = (name, value, callback) => {
       let newValue;
 
@@ -357,6 +394,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
         updateAllForm: this.updateAll,
         submitForm: this.submitForm,
         resetForm: this.resetForm,
+        emptyField: this.emptyField,
         updateRequired: this.updateRequired
       };
 
