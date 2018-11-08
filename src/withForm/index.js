@@ -142,7 +142,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
       if (name in this.state.form) {
         if (this.state.form[name] instanceof Array) {
-          newValue = []
+          newValue = [];
         } else {
           newValue = '';
         }
@@ -171,10 +171,9 @@ const withForm = (input, handlers, errors) => BaseComponent => {
       } else {
         console.warn('This field is not defined in the form');
       }
+    };
 
-    }
-
-    updateField = (name, value, callback) => {
+    updateField = (name, value, keyCompare = 'id', callback) => {
       let newValue;
 
       if (name in this.state.form) {
@@ -182,7 +181,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
           if (this.state.form[name].includes(value)) {
             if (Object.values(this.state.form[name])[0] instanceof Object) {
               newValue = this.state.form[name].filter(
-                item => Object.values(item)[0] === Object.values(value)[0]
+                item => Object.values(item)[0] !== Object.values(value)[0]
               );
             } else {
               newValue = this.state.form[name].filter(item => item !== value);
@@ -193,15 +192,14 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
           if (Object.values(this.state.form[name])[0] instanceof Object) {
             const checkIfExistValue = this.state.form[name].find(
-              item => Object.values(item)[0] === Object.values(value)[0]
+              item =>
+                item[keyCompare] === value[keyCompare] &&
+                item[keyCompare] !== undefined
             );
 
             if (checkIfExistValue) {
               newValue = this.state.form[name].map(
-                item =>
-                  Object.values(item)[0] === Object.values(value)[0]
-                    ? value
-                    : item
+                item => (item[keyCompare] === value[keyCompare] ? value : item)
               );
             } else {
               newValue = [...this.state.form[name], value];
