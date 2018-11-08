@@ -9,6 +9,7 @@ import WithActions from './withActions';
 import WithForm from './withForm';
 import WithRefs from './withRefs';
 import WithChildren from './withChildren';
+import WithFormArray from './withFormArray';
 
 const Card = ({ title, children }) => (
   <div className="card">
@@ -43,6 +44,10 @@ const App = (
     <br />
     <Card title="With Form">
       <WithForm />
+    </Card>
+    <br />
+    <Card title="With Form Array">
+      <WithFormArray />
     </Card>
     <br />
     <Card title="With Refs">
