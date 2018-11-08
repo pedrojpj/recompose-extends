@@ -142,7 +142,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
       if (name in this.state.form) {
         if (this.state.form[name] instanceof Array) {
-          newValue = []
+          newValue = [];
         } else {
           newValue = '';
         }
@@ -171,8 +171,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
       } else {
         console.warn('This field is not defined in the form');
       }
-
-    }
+    };
 
     updateField = (name, value, keyCompare = 'id', callback) => {
       let newValue;
@@ -200,7 +199,7 @@ const withForm = (input, handlers, errors) => BaseComponent => {
 
             if (checkIfExistValue) {
               newValue = this.state.form[name].map(
-                item => (item.id === value.id ? value : item)
+                item => (item[keyCompare] === value[keyCompare] ? value : item)
               );
             } else {
               newValue = [...this.state.form[name], value];
